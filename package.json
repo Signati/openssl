@@ -1,6 +1,6 @@
 {
   "name": "@signati/openssl",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "for node js ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -45,7 +45,6 @@
     "lib/**/*"
   ],
   "dependencies": {
-    "@ampretia/x509": "^0.4.7",
     "@types/node-forge": "^0.8.7",
     "exact-math": "^2.1.2",
     "execa": "^4.0.0",

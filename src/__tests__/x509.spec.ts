@@ -81,13 +81,7 @@ describe('Create x509', () => {
             expect(useX509());
         })
 
-        test('Return this subject .cer', () => {
-            const useX509 = async () => {
-                const subject = await x509.subject('src/certificados/LAN7008173R5.cer')
-                console.log(subject)
-            }
-            expect(useX509());
-        })
+
 
         test('Return this issuer .cer', () => {
             const useX509 = async () => {
@@ -161,22 +155,51 @@ describe('Create x509', () => {
             }
             expect(useX509());
         })
-
     */
-        test('Return this pem .cer', () => {
-            const useX509 = async () => {
-                const pem = await x509.getCerPem('src/certificados/maca961017759.cer')
-                console.log(pem)
-            }
-            expect(useX509());
-        })
+    test('Return this startDate .cer', () => {
+        const useX509 = async () => {
+            const startDate = await x509.startDate('src/certificados/LAN7008173R5.cer')
+            console.log(startDate)
+        }
+        expect(useX509());
+    })
 
-        test('Return this No Cer .cer', () => {
-            const useX509 = async () => {
-                const noCer = await x509.getNoCer('src/certificados/maca961017759.cer')
-                console.log(noCer)
-            }
-            expect(useX509());
-        })
+    test('Return this endDate .cer', () => {
+        const useX509 = async () => {
+            const endDate = await x509.endDate('src/certificados/LAN7008173R5.cer')
+            console.log(endDate)
+        }
+        expect(useX509());
+    })
+    test('Return this subject .cer', () => {
+        const useX509 = async () => {
+            const subject = await x509.subject('src/certificados/00001000000503357225.cer')
+            console.log(subject)
+        }
+        expect(useX509());
+    })
+
+    test('Return this issuer .cer', () => {
+        const useX509 = async () => {
+            const issuer = await x509.issuer('src/certificados/00001000000503357225.cer')
+            console.log(issuer)
+        }
+        expect(useX509());
+    })
+    test('Return this pem .cer', () => {
+        const useX509 = async () => {
+            const pem = await x509.getCerPem('src/certificados/maca961017759.cer')
+            // console.log(pem)
+        }
+        expect(useX509());
+    })
+
+    test('Return this No Cer .cer', () => {
+        const useX509 = async () => {
+            const noCer = await x509.getNoCer('src/certificados/maca961017759.cer')
+            // console.log(noCer)
+        }
+        expect(useX509());
+    })
 
 });

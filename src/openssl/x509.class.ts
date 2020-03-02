@@ -1,7 +1,8 @@
 import {commandSync} from 'execa';
 import {pki} from 'node-forge';
-import {Certificate} from '../interface/certificate.interface';
+import {AnyKey, Certificate} from '../interface/certificate.interface';
 import {getOsComandBin} from '../utils'
+import moment = require('moment');
 
 class X509Class {
     public async text(cer: string): Promise<string> {
@@ -99,17 +100,47 @@ class X509Class {
         }
     }
 
-    public async subject(cer: string): Promise<string> {
+    public subject(cer: string): AnyKey {
         try {
-            return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -subject`).stdout
+            let text = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -subject`).stdout
+            console.log(text)
+            text = text.replace('subject=', '');
+            const stringArray = text.split(',');
+            const obj: AnyKey = {};
+            for (const txt of stringArray) {
+                const extrac = txt.split('=');
+                if (extrac.length === 2) {
+                    const key = extrac[0].replace(/^\s+/g, '').replace(/\s+$/g, '');
+                    const val = extrac[1].replace(/^\s+/g, '').replace(/\s+$/g, '');
+                    // console.log(key+val);
+                    obj[key] = val;
+                }
+            }
+            return obj;
         } catch (e) {
             return e.message
         }
     }
 
-    public async issuer(cer: string): Promise<string> {
+    public issuer(cer: string): AnyKey {
         try {
-            return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -issuer`).stdout
+            let text = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -issuer`, {encoding: 'utf8'}).stdout
+
+            text = text.replace('issuer=', '');
+            console.log(text)
+            const stringArray = text.split(',');
+            // console.log(stringArray)
+            const obj: AnyKey = {};
+            for (const txt of stringArray) {
+                const extrac = txt.split('=');
+                if (extrac.length === 2) {
+                    const key = extrac[0].replace(/^\s+/g, '').replace(/\s+$/g, '');
+                    const val = extrac[1].replace(/^\s+/g, '').replace(/\s+$/g, '');
+                    // console.log(key+val);
+                    obj[key] = val;
+                }
+            }
+            return obj;
         } catch (e) {
             return e.message
         }
@@ -133,7 +164,15 @@ class X509Class {
 
     public async startDate(cer: string): Promise<string> {
         try {
-            return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -startdate`).stdout
+            let startDateCer = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -startdate`).stdout
+            startDateCer = startDateCer.replace('notBefore=', '').replace('  ', '');
+            console.log(startDateCer)
+            const pattOne = new RegExp('([A-z]{3}) ([0-9]{1,2}) ([0-2][0-9]:[0-5][0-9]:[0-5][0-9]) ([0-9]{4})');
+            const findregex = startDateCer.match(pattOne);
+            const fecha = findregex ? findregex[2] + '/' + findregex[1] + '/' + findregex[4] : ''; // +' '+ findregex[3]
+            const staff = findregex ? findregex[3] : '';
+            startDateCer = moment(new Date(fecha)).format('DD/MM/YYYY') + ' ' + staff;
+            return startDateCer;
         } catch (e) {
             return e.message
         }
@@ -141,7 +180,16 @@ class X509Class {
 
     public async endDate(cer: string): Promise<string> {
         try {
-            return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -enddate`).stdout
+            let endDateCer = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -enddate`).stdout
+            endDateCer = endDateCer.replace('notBefore=', '').replace('  ', '');
+            console.log(endDateCer)
+            const pattOne = new RegExp('([A-z]{3}) ([0-9]{1,2}) ([0-2][0-9]:[0-5][0-9]:[0-5][0-9]) ([0-9]{4})');
+            const findregex = endDateCer.match(pattOne);
+            console.log(findregex)
+            const fecha = findregex ? findregex[2] + '/' + findregex[1] + '/' + findregex[4] : ''; // +' '+ findregex[3]
+            const staff = findregex ? findregex[3] : '';
+            endDateCer = moment(new Date(fecha)).format('DD/MM/YYYY') + ' ' + staff;
+            return endDateCer;
         } catch (e) {
             return e.message
         }
