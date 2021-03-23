@@ -357,6 +357,15 @@ class X509 {
         this.commandlineArray.push(`-force_pubkey ${key}`);
         return this;
     }
+    public  run() {
+        try {
+            const saxonProc = commandSync(this.commandline).stdout;
+            return saxonProc;
+        } catch (e) {
+            throw new Error(e.message);
+
+        }
+    }
 
 }
 
