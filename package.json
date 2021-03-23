@@ -1,6 +1,6 @@
 {
   "name": "@signati/openssl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "for node js ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

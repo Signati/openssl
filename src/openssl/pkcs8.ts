@@ -1,7 +1,7 @@
 import {commandSync} from 'execa';
 import {getOsComandBin} from '../utils';
 
-class Pkcs8Class {
+class Pkcs8 {
 
     public getPrivateKey(keyFile: string, password: string): { privateKeyPem: string, privatekey: string } {
         try {
@@ -18,4 +18,4 @@ class Pkcs8Class {
     }
 }
 
-export const pkcs8Class = new Pkcs8Class();
+export const pkcs8 = new Pkcs8();

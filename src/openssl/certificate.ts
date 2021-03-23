@@ -1,10 +1,10 @@
 import {commandSync} from 'execa';
-import {pki} from 'node-forge';
-import {AnyKey, Certificate} from '../interface/certificate.interface';
-import {getOsComandBin} from '../utils'
 import moment = require('moment');
+import {pki} from 'node-forge';
+import {AnyKey} from '../interface/certificate.interface';
+import {getOsComandBin} from '../utils';
 
-class X509Class {
+class Certificate {
     public async text(cer: string): Promise<string> {
         try {
             return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -text`).stdout
@@ -27,7 +27,7 @@ class X509Class {
         }
     }
 
-    public async modulus(cer: string): Promise<{ modulus: string }> {
+    public async modulu(cer: string): Promise<{ modulus: string }> {
         try {
             const result = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -modulus`).stdout
             const modul = {
@@ -103,7 +103,6 @@ class X509Class {
     public subject(cer: string): AnyKey {
         try {
             let text = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -subject`).stdout
-            console.log(text)
             text = text.replace('subject=', '');
             const stringArray = text.split(',');
             const obj: AnyKey = {};
@@ -127,7 +126,6 @@ class X509Class {
             let text = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -issuer`, {encoding: 'utf8'}).stdout
 
             text = text.replace('issuer=', '');
-            console.log(text)
             const stringArray = text.split(',');
             // console.log(stringArray)
             const obj: AnyKey = {};
@@ -166,7 +164,6 @@ class X509Class {
         try {
             let startDateCer = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -startdate`).stdout
             startDateCer = startDateCer.replace('notBefore=', '').replace('  ', '');
-            console.log(startDateCer)
             const pattOne = new RegExp('([A-z]{3}) ([0-9]{1,2}) ([0-2][0-9]:[0-5][0-9]:[0-5][0-9]) ([0-9]{4})');
             const findregex = startDateCer.match(pattOne);
             const fecha = findregex ? findregex[2] + '/' + findregex[1] + '/' + findregex[4] : ''; // +' '+ findregex[3]
@@ -182,10 +179,8 @@ class X509Class {
         try {
             let endDateCer = commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -enddate`).stdout
             endDateCer = endDateCer.replace('notBefore=', '').replace('  ', '');
-            console.log(endDateCer)
             const pattOne = new RegExp('([A-z]{3}) ([0-9]{1,2}) ([0-2][0-9]:[0-5][0-9]:[0-5][0-9]) ([0-9]{4})');
             const findregex = endDateCer.match(pattOne);
-            console.log(findregex)
             const fecha = findregex ? findregex[2] + '/' + findregex[1] + '/' + findregex[4] : ''; // +' '+ findregex[3]
             const staff = findregex ? findregex[3] : '';
             endDateCer = moment(new Date(fecha)).format('DD/MM/YYYY') + ' ' + staff;
@@ -236,7 +231,7 @@ class X509Class {
         }
     }
 
-    public getCerPem(cer: string): Certificate {
+    public getCerPem(cer: string): { certificate: string; cerPem: string } {
         try {
             const pem = commandSync(`${getOsComandBin()} x509 -inform DER -in ${cer} -outform PEM`).stdout
 
@@ -251,7 +246,6 @@ class X509Class {
         }
     }
 
-
     public getNoCer(cer: string): string {
         try {
             const pem = commandSync(`${getOsComandBin()} x509 -inform DER -in ${cer} -outform PEM`).stdout
@@ -264,7 +258,5 @@ class X509Class {
             return e.message
         }
     }
-
 }
-
-export const x509 = new X509Class();
+export const certificate = new Certificate();

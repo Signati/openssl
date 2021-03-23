@@ -1,5 +1,5 @@
 import {Cer} from './interface/certificate.interface';
-import {x509} from './openssl/x509.class';
+import {certificate} from './openssl/certificate';
 import {readFileSync} from './utils';
 import {openssl} from './utils/Openssl';
 class CerClass {
@@ -12,8 +12,8 @@ class CerClass {
         nocer: string;
     } {
         return {
-            cer: x509.getCerPem(cerpath).certificate,
-            nocer: x509.getNoCer(cerpath)
+            cer: certificate.getCerPem(cerpath).certificate,
+            nocer: certificate.getNoCer(cerpath)
         };
     }
 
