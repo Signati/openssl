@@ -1,39 +1,21 @@
 import {commandSync} from 'execa';
-import {pki} from 'node-forge';
-import {AnyKey, Certificate} from '../interface/certificate.interface';
 import {getOsComandBin} from '../utils'
-import moment = require('moment');
+import * as execa from "execa";
+import {CliShare} from "./cliShare";
 
-class X509 {
-    private commandline = '';
-    private commandlineArray: string[] = [];
-    private opensslBin = '';
+class X509 extends CliShare {
+    public commandline = '';
+    public commandlineArray: string[] = [];
+    public opensslBin = '';
 
     constructor() {
+        super();
         this.opensslBin = getOsComandBin();
-        this.commandline = this.opensslBin
+        this.commandline = this.opensslBin + ' x509';
     }
 
     public help() {
 
-    }
-
-    public inform(options: 'DER' | 'PEM') {
-        this.commandline += ` -inform ${options}`;
-        this.commandlineArray.push(`-inform ${options}`);
-        return this;
-    }
-
-    public outform(options: 'DER' | 'PEM') {
-        this.commandline += ` -outform  ${options}`;
-        this.commandlineArray.push(`-outform ${options}`);
-        return this;
-    }
-
-    public in(filename: string) {
-        this.commandline += ` -in  ${filename}`;
-        this.commandlineArray.push(`-in ${filename}`);
-        return this;
     }
 
     public out(filename: string) {
@@ -200,9 +182,9 @@ class X509 {
         return this;
     }
 
-    public checkend() {
-        this.commandline += ` -checkend`;
-        this.commandlineArray.push(`-checkend`);
+    public checkend(num: string | number) {
+        this.commandline += ` -checkend ${num}`;
+        this.commandlineArray.push(`-checkend ${num}`);
         return this;
     }
 
@@ -270,12 +252,6 @@ class X509 {
 
     public sigopt(arg: string) {
         // todo
-        return this;
-    }
-
-    public passin(arg: string) {
-        this.commandline += ` -passin ${arg}`;
-        this.commandlineArray.push(`-passin ${arg}`);
         return this;
     }
 
@@ -356,15 +332,6 @@ class X509 {
         this.commandline += ` -force_pubkey ${key}`;
         this.commandlineArray.push(`-force_pubkey ${key}`);
         return this;
-    }
-    public  run() {
-        try {
-            const saxonProc = commandSync(this.commandline).stdout;
-            return saxonProc;
-        } catch (e) {
-            throw new Error(e.message);
-
-        }
     }
 
 }

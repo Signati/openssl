@@ -1,7 +1,6 @@
-import {Cer} from './interface/certificate.interface';
-import {certificate} from './openssl/certificate';
-import {readFileSync} from './utils';
-import {openssl} from './utils/Openssl';
+import {readFileSync} from '../utils';
+import {certificate} from './certificate';
+
 class CerClass {
     public async generaCerPem(filePathCer: string, outputpath: string) {
         return 1;
@@ -29,6 +28,7 @@ class CerClass {
             return e.message;
         }
     }
+
     public async agetCerPem(cerpempath: string) {
         return 1;
     }

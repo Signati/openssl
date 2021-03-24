@@ -1,21 +1,16 @@
 import {commandSync} from 'execa';
 import {getOsComandBin} from '../utils';
+import {CliShare} from './cliShare';
+class Pkcs8 extends CliShare {
+    public commandline = '';
+    public commandlineArray: string[] = [];
+    public opensslBin = '';
 
-class Pkcs8 {
-
-    public getPrivateKey(keyFile: string, password: string): { privateKeyPem: string, privatekey: string } {
-        try {
-            const keyPem = commandSync(`${getOsComandBin()} pkcs8 -inform DER -in ${keyFile} -outform PEM -passin pass:${password}`).stdout;
-
-            const privateKey = {
-                privateKeyPem: keyPem,
-                privatekey: keyPem.replace(/(-+[^-]+-+)/g, '').replace(/\s+/g, '')
-            }
-            return privateKey
-        } catch (e) {
-            return e.message
-        }
+    constructor() {
+        super();
+        this.opensslBin = getOsComandBin();
+        this.commandline = this.opensslBin + ' pkcs8';
     }
-}
 
-export const pkcs8 = new Pkcs8();
+}
+export const pkcs8 = new Pkcs8()

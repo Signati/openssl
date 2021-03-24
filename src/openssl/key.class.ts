@@ -1,11 +1,20 @@
 import * as fs from 'fs';
-import {pkcs8} from './openssl/pkcs8';
-import {openssl} from './utils/Openssl';
+import {pkcs8} from './pkcs8';
 
 class KeyClass {
 
-    public async getKey(keyfile: string, password: string): Promise<string> {
-        return await pkcs8.getPrivateKey(keyfile, password).privateKeyPem;
+    public async getKey(keyfile: string, password: string): Promise<{ privateKeyPem: string, privatekey: string }> {
+        try {
+            // const keyPem = commandSync(`${getOsComandBin()} pkcs8 -inform DER -in ${keyfile} -outform PEM -passin pass:${password}`).stdout;
+            const keyPem = pkcs8.inform('DER').in(keyfile).outform('PEM').passin(password).run();
+            const privateKey = {
+                privateKeyPem: keyPem,
+                privatekey: keyPem.replace(/(-+[^-]+-+)/g, '').replace(/\s+/g, '')
+            }
+            return privateKey
+        } catch (e) {
+            return e.message
+        }
     }
 
     public async generaKeyPem(filePathKey: string, outputpath: string) {
