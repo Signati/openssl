@@ -1,6 +1,6 @@
+import * as execa from 'execa';
+import {commandSync} from 'execa';
 import {getOsComandBin} from '../utils';
-import * as execa from "execa";
-import {commandSync} from "execa";
 
 export class CliShare {
     public commandline = '';
@@ -38,7 +38,9 @@ export class CliShare {
 
     public run(options?: execa.SyncOptions): string {
         try {
-            const saxonProc = commandSync(this.commandline, options).stdout;
+            const cli = this.commandline
+            this.commandline = this.opensslBin + ' '+ this.command;
+            const saxonProc = commandSync(cli, options).stdout;
             return saxonProc;
         } catch (e) {
             throw new Error(e.message);

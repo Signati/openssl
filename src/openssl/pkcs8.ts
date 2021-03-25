@@ -4,12 +4,13 @@ import {CliShare} from './cliShare';
 class Pkcs8 extends CliShare {
     public commandline = '';
     public commandlineArray: string[] = [];
+    public command = 'pkcs8';
     public opensslBin = '';
 
     constructor() {
         super();
         this.opensslBin = getOsComandBin();
-        this.commandline = this.opensslBin + ' pkcs8';
+        this.commandline = this.opensslBin + ' '+ this.command;
     }
 
 }
