@@ -5,6 +5,7 @@ import {commandSync} from "execa";
 export class CliShare {
     public commandline = '';
     public commandlineArray: string[] = [];
+    public command = '';
     public opensslBin = '';
 
     constructor() {
@@ -39,6 +40,28 @@ export class CliShare {
         try {
             const saxonProc = commandSync(this.commandline, options).stdout;
             return saxonProc;
+        } catch (e) {
+            throw new Error(e.message);
+
+        }
+    }
+
+    public cli(): string {
+        try {
+            const cp = this.commandline
+            this.commandline = this.opensslBin + ' '+ this.command;
+            return cp
+        } catch (e) {
+            throw new Error(e.message);
+
+        }
+    }
+
+    public cliArray(): string[] {
+        try {
+            const cp = [...this.commandlineArray]
+            this.commandlineArray = []
+            return cp;
         } catch (e) {
             throw new Error(e.message);
 

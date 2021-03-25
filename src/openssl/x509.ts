@@ -6,12 +6,13 @@ import {CliShare} from "./cliShare";
 class X509 extends CliShare {
     public commandline = '';
     public commandlineArray: string[] = [];
+    public command = 'x509';
     public opensslBin = '';
 
     constructor() {
         super();
         this.opensslBin = getOsComandBin();
-        this.commandline = this.opensslBin + ' x509';
+        this.commandline = this.opensslBin + ' '+ this.command;
     }
 
     public help() {
