@@ -7,8 +7,8 @@ describe('Create x509', () => {
         const useX509 = async () => {
             const keyCertificates = pkcs8.inform('DER')
                 .in('src/certificados/LAN7008173R5.key')
-                .outform('PEM').passin('12345678a').cli();
-            // console.log(keyCertificates)
+                .outform('PEM').passin('pass:12345678a').run();
+            console.log(keyCertificates)
         }
         expect(useX509());
     })

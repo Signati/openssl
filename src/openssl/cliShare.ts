@@ -29,10 +29,22 @@ export class CliShare {
         this.commandlineArray.push(`-in ${filename}`);
         return this;
     }
-
+   // todo https://www.openssl.org/docs/man1.1.1/man1/openssl.html
     public passin(arg: string) {
-        this.commandline += ` -passin pass:${arg}`;
-        this.commandlineArray.push(`-passin pass:${arg}`);
+        this.commandline += ` -passin ${arg}`;
+        this.commandlineArray.push(`-passin ${arg}`);
+        return this;
+    }
+
+    public passout(arg: string) {
+        this.commandline += ` -passout ${arg}`;
+        this.commandlineArray.push(`-passout ${arg}`);
+        return this;
+    }
+
+    public out(filename: string) {
+        this.commandline += ` -out ${filename}`;
+        this.commandlineArray.push(`-out ${filename}`);
         return this;
     }
 

@@ -19,12 +19,6 @@ class X509 extends CliShare {
 
     }
 
-    public out(filename: string) {
-        this.commandline += ` -out ${filename}`;
-        this.commandlineArray.push(`-out ${filename}`);
-        return this;
-    }
-
     public digest() {
         this.commandline += ` -digest`;
         this.commandlineArray.push(`-digest`);
