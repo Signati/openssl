@@ -1,7 +1,7 @@
 import {readFileSync} from '../utils';
 import {certificate} from './certificate';
 
-class CerClass {
+class Cer {
     public async generaCerPem(filePathCer: string, outputpath: string) {
         return 1;
     }
@@ -67,4 +67,4 @@ class CerClass {
     }
 }
 
-export const cer = new CerClass();
+export const cer = new Cer();

@@ -1,12 +1,12 @@
 import * as fs from 'fs';
 import {pkcs8} from './pkcs8';
 
-class KeyClass {
+class Key {
 
     public async getKey(keyfile: string, password: string): Promise<{ privateKeyPem: string, privatekey: string }> {
         try {
             // const keyPem = commandSync(`${getOsComandBin()} pkcs8 -inform DER -in ${keyfile} -outform PEM -passin pass:${password}`).stdout;
-            const keyPem = pkcs8.inform('DER').in(keyfile).outform('PEM').passin(password).run();
+            const keyPem = pkcs8.inform('DER').in(keyfile).outform('PEM').passin('pass:' + password).run();
             const privateKey = {
                 privateKeyPem: keyPem,
                 privatekey: keyPem.replace(/(-+[^-]+-+)/g, '').replace(/\s+/g, '')
@@ -36,4 +36,5 @@ class KeyClass {
         }
     }
 }
-export const key = new KeyClass()
+
+export const key = new Key()
