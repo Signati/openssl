@@ -11,7 +11,7 @@ class Cer {
         nocer: string;
     } {
         return {
-            cer: certificate.getCerPem(cerpath).certificate,
+            cer: certificate.getCer(cerpath).certificate,
             nocer: certificate.getNoCer(cerpath)
         };
     }

@@ -1,10 +1,9 @@
-import {commandSync} from 'execa';
 import moment = require('moment');
 import {pki} from 'node-forge';
 import {AnyKey} from '../interface/certificate.interface';
-import {getOsComandBin} from '../utils';
+import {readFileSync} from '../utils';
 import {x509} from './x509';
-import fs from "fs";
+
 
 class Certificate {
     public async text(cer: string): Promise<string> {
@@ -210,7 +209,7 @@ class Certificate {
 
     public async Dates(cer: string): Promise<string> {
         try {
-            return  x509.inform('DER').in(cer).noout().dates().run();
+            return x509.inform('DER').in(cer).noout().dates().run();
             // return commandSync(`${getOsComandBin()} x509 -inform der -in ${cer} -noout -dates`).stdout
         } catch (e) {
             return e.message
@@ -253,34 +252,48 @@ class Certificate {
         }
     }
 
-    // public getCerPem(cer: string): { certificate: string; cerPem: string } {
-    //     try {
-    //         // const pem = commandSync(`${getOsComandBin()} x509 -inform DER -in ${cer} -outform PEM`).stdout
-    //         const pem = x509.inform('DER').in(cer).outform('PEM').run();
-    //         const cerPem = {
-    //             cerPem: pem,
-    //             certificate: pem.replace(/(-+[^-]+-+)/g, '').replace(/\s+/g, '')
-    //         }
-    //         return cerPem
-    //
-    //     } catch (e) {
-    //         return e.message
-    //     }
-    // }
-    //
-    // public getNoCer(cer: string): string {
-    //     try {
-    //         // const pem = commandSync(`${getOsComandBin()} x509 -inform DER -in ${cer} -outform PEM`).stdout
-    //         const pem = x509.inform('DER').in(cer).outform('PEM').run();
-    //         // @ts-ignore
-    //         const serialNumber = pki.certificateFromPem(pem).serialNumber.match(/.{1,2}/g).map((v) => {
-    //             return String.fromCharCode(parseInt(v, 16));
-    //         }).join('');
-    //         return serialNumber;
-    //     } catch (e) {
-    //         return e.message
-    //     }
-    // }
+    public getCer(cer: string): { certificate: string; cerPem: string } {
+        try {
+            // const pem = commandSync(`${getOsComandBin()} x509 -inform DER -in ${cer} -outform PEM`).stdout
+            const pem = x509.inform('DER').in(cer).outform('PEM').run();
+            const cerPem = {
+                cerPem: pem,
+                certificate: pem.replace(/(-+[^-]+-+)/g, '').replace(/\s+/g, '')
+            }
+            return cerPem
+
+        } catch (e) {
+            return e.message
+        }
+    }
+
+    public async getCerPem(cerpempath: string, title: boolean = false) {
+        try {
+            let cerpem = readFileSync(cerpempath);
+            if (title) {
+                cerpem = cerpem.replace(/(-+[^-]+-+)/g, '');
+                cerpem = cerpem.replace(/\s+/g, '');
+            }
+            return cerpem;
+        } catch (e) {
+            return e.message;
+        }
+    }
+
+    public getNoCer(cer: string): string {
+        try {
+
+            const pem = x509.inform('DER').in(cer).outform('PEM').run();
+            // @ts-ignore
+            const serialNumber = pki.certificateFromPem(pem).serialNumber.match(/.{1,2}/g).map((v) => {
+                return String.fromCharCode(parseInt(v, 16));
+            }).join('');
+            return serialNumber;
+        } catch (e) {
+            return e.message
+        }
+    }
+
     //
     // async getKey(options: OptionsSsl, title: boolean = false) {
     //     try {
@@ -311,18 +324,7 @@ class Certificate {
     //     }
     // }
     //
-    // async getCerPem(cerpempath: string, title: boolean = false) {
-    //     try {
-    //         let cerpem = FileSystem.readFileSync(cerpempath);
-    //         if (title) {
-    //             cerpem = cerpem.replace(/(-+[^-]+-+)/g, '');
-    //             cerpem = cerpem.replace(/\s+/g, '');
-    //         }
-    //         return cerpem;
-    //     } catch (e) {
-    //         return e.message;
-    //     }
-    // }
+
     //
     // async getCer(cerpath: string, title: boolean = false) {
     //     try {
@@ -338,20 +340,7 @@ class Certificate {
     //     }
     // }
     //
-    // async getNoCer(cerpath: string) {
-    //     try {
-    //         const opensslpms = ['x509', '-inform', 'DER', '-in', `${cerpath}`, '-outform', 'PEM'];
-    //         const pem = await terminal(this.opensslbin, opensslpms);
-    //         // @ts-ignore
-    //         const serialNumber = pki.certificateFromPem(pem).serialNumber.match(/.{1,2}/g).map((v) => {
-    //             return String.fromCharCode(parseInt(v, 16));
-    //         })
-    //             .join('');
-    //         return serialNumber;
-    //     } catch (e) {
-    //         return e.message;
-    //     }
-    // }
+
     //
     // async getStarDateCerPem(cerpempath: string) {
     //     try {
