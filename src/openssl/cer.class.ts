@@ -2,7 +2,6 @@ import moment = require('moment');
 import {pki} from 'node-forge';
 import {AnyKey} from '../interface/certificate.interface';
 import {readFileSync} from '../utils';
-import {certificate} from './certificate';
 import {x509} from './x509';
 
 class Cer {
