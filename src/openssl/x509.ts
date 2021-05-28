@@ -257,8 +257,8 @@ class X509 extends CliShare {
     }
 
     public keyform(options: 'DER' | 'PEM' | 'ENGINE') {
-        this.commandline += ` -inform ${options}`;
-        this.commandlineArray.push(`-inform ${options}`);
+        this.commandline += ` -keyform ${options}`;
+        this.commandlineArray.push(`-keyform ${options}`);
         return this;
     }
 
